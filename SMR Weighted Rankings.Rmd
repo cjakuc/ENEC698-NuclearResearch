@@ -1,0 +1,45 @@
+---
+title: "SMR Weighted Rankings"
+author: "Chris Jakuc"
+date: "9/17/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(dplyr)
+library(readr)
+```
+
+## R Markdown
+
+
+Read in csv
+```{r}
+DATA <- read_csv('/Users/chris/Desktop/Fall_2019/ENEC_698/SMR_Weighted_Ranking.csv')
+
+DATA1 <- DATA %>%
+  gather(Metrics,MetricValue,  MWe:`Construction Time`)
+```
+
+
+Figure of all reactors
+```{r}
+ggplot(DATA1)+
+  geom_col(aes(x=Reactor,y=MetricValue, fill = fct_rev(Metrics))) +
+  ylab("Scoring")+
+  ggtitle("Final Reactor Scoring")+
+  theme(legend.title=element_blank())
+
+
+```
+
+Faceted reactor scoring
+```{r echo=FALSE}
+ggplot(DATA1)+
+  geom_col(aes(x=Metrics, y=MetricValue, fill=Metrics))+
+  facet_wrap(Reactor~.)+
+  theme(axis.text.x=element_text(angle=45,hjust=1))
+```
+
